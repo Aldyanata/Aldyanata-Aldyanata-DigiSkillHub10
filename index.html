@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lean Canvas Interaktif - DigiSkill Hub | Abid Aldyanata - 044572807 </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+        }
+        .problem-tab.active {
+            border-color: #4f46e5;
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+        .problem-tab {
+            transition: all 0.3s ease;
+        }
+    </style>
+    <!-- Chosen Palette: Neutral Indigo (Background: gray-50, Text: gray-900, Accent: indigo-600, Chart1: indigo-600, Chart2: sky-500, Chart3: teal-600) -->
+    <!-- Application Structure Plan: SPA dengan 4 bagian tematik (Gambaran Umum, Landasan Pasar, Model Operasional, Finansial & Kinerja). Struktur ini mengubah 9 blok statis menjadi alur eksplorasi logis, dimulai dari 'apa/siapa', lalu 'mengapa', 'bagaimana', dan 'hasil'. Navigasi header memungkinkan lompatan cepat, sementara interaksi (tab, bagan) memperdalam pemahaman di setiap bagian. Ini lebih berpusat pada pengguna daripada sekadar menyajikan tabel asli. -->
+    <!-- Visualization & Content Choices: [Segmen Pelanggan -> Goal: Perbandingan -> Viz: Doughnut Chart (Chart.js) -> Interaction: Hover -> Justification: Visualisasi proporsi fokus pelanggan]; [Problem/Solution -> Goal: Hubungan -> Viz: Tab HTML/JS -> Interaction: Click -> Justification: Menghubungkan langsung masalah & solusi]; [Biaya/Pendapatan -> Goal: Komparasi -> Viz: Grouped Bar Chart (Chart.js) -> Interaction: Hover -> Justification: Komparasi langsung komponen finansial]; [KPIs -> Goal: Inform -> Viz: Kartu KPI (HTML/Tailwind) -> Interaction: None -> Justification: Tampilan dashboard standar]. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <h1 class="text-xl sm:text-2xl font-bold text-indigo-600">Lean Canvas Interaktif - DigiSkill Hub | Abid Aldyanata - 044572807</h1>
+                <nav class="hidden sm:flex space-x-4">
+                    <a href="#gambaran" class="nav-link text-gray-600 hover:text-indigo-600 font-medium">Gambaran</a>
+                    <a href="#landasan" class="nav-link text-gray-600 hover:text-indigo-600 font-medium">Landasan</a>
+                    <a href="#operasional" class="nav-link text-gray-600 hover:text-indigo-600 font-medium">Operasional</a>
+                    <a href="#finansial" class="nav-link text-gray-600 hover:text-indigo-600 font-medium">Finansial</a>
+                </nav>
+                <div class="sm:hidden">
+                    <select id="mobile-nav" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="#gambaran">Gambaran</option>
+                        <option value="#landasan">Landasan</option>
+                        <option value="#operasional">Operasional</option>
+                        <option value="#finansial">Finansial</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+        <!-- Bagian 1: Gambaran Umum (UVP & Segmen Pelanggan) -->
+        <section id="gambaran" class="mb-12 sm:mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Gambaran Umum Model Bisnis</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-3xl">
+                Bagian ini menguraikan inti dari proposisi nilai "DigiSkill Hub" dan segmen pelanggan utama yang dituju. Ini menjawab pertanyaan mendasar: "Apa yang kami tawarkan?" dan "Untuk siapa tawaran ini?"
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-indigo-600 mb-3">Proposisi Nilai Unik (UVP)</h3>
+                    <blockquote class="text-xl font-medium text-gray-800 italic border-l-4 border-indigo-500 pl-4 py-2 mb-4">
+                        "Akselerasi Kompetensi Digital Komprehensif"
+                    </blockquote>
+                    <p class="text-gray-700">
+                        Kami menyediakan akses tanpa batas ke serangkaian kursus keahlian digital berstandar industri. Model bisnis ini didukung oleh sistem langganan bulanan yang paling kompetitif di pasar, serta diperkuat dengan sesi konsultasi dan mentoring terjadwal mingguan.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Segmen Pelanggan</h3>
+                    <p class="text-gray-700 mb-4">
+                        Platform kami dirancang untuk melayani tiga kelompok utama yang paling membutuhkan peningkatan keterampilan digital.
+                    </p>
+                    <div class="chart-container relative w-full max-w-md mx-auto h-72 md:h-80 max-h-[400px]">
+                        <canvas id="segmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 2: Landasan Pasar (Masalah & Solusi) -->
+        <section id="landasan" class="mb-12 sm:mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Landasan Pasar</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-3xl">
+                Setiap model bisnis yang sukses dimulai dari pemahaman mendalam tentang masalah yang ada di pasar. Bagian ini memetakan isu-isu kunci yang dihadapi segmen pelanggan kami dan solusi inti yang ditawarkan "DigiSkill Hub" untuk mengatasinya.
+            </p>
+            
+            <div class="flex flex-wrap gap-2 sm:gap-4 mb-6">
+                <button class="problem-tab active text-sm sm:text-base py-2 px-3 sm:px-5 rounded-full font-medium border-2 border-transparent bg-gray-200 text-gray-700" data-tab="1">
+                    Isu 1: Biaya & Fleksibilitas
+                </button>
+                <button class="problem-tab text-sm sm:text-base py-2 px-3 sm:px-5 rounded-full font-medium border-2 border-transparent bg-gray-200 text-gray-700" data-tab="2">
+                    Isu 2: Kesenjangan Kompetensi
+                </button>
+                <button class="problem-tab text-sm sm:text-base py-2 px-3 sm:px-5 rounded-full font-medium border-2 border-transparent bg-gray-200 text-gray-700" data-tab="3">
+                    Isu 3: Kapabilitas UMKM
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div id="problem-content-1" class="problem-content p-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-red-600 mb-2">Isu Kunci</h4>
+                            <p class="text-gray-700">Biaya pelatihan digital konvensional tinggi dan memiliki fleksibilitas terbatas, menghalangi akses bagi banyak individu.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-green-600 mb-2">Solusi Inti</h4>
+                            <p class="text-gray-700">Penyediaan modul pembelajaran video-on-demand dengan format terstruktur dan padat, diakses melalui langganan murah.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="problem-content-2" class="problem-content p-6 hidden">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-red-600 mb-2">Isu Kunci</h4>
+                            <p class="text-gray-700">Adanya kesenjangan kompetensi digital (skill gap) yang signifikan pada lulusan baru/pencari kerja.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-green-600 mb-2">Solusi Inti</h4>
+                            <p class="text-gray-700">Sistem sertifikasi digital terintegrasi dan fasilitasi sesi mentoring live untuk memastikan kesiapan kerja.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="problem-content-3" class="problem-content p-6 hidden">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-red-600 mb-2">Isu Kunci</h4>
+                            <p class="text-gray-700">Keterbatasan kapabilitas dalam pemasaran digital di kalangan Usaha Mikro, Kecil, dan Menengah (UMKM).</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-green-600 mb-2">Solusi Inti</h4>
+                            <p class="text-gray-700">Kurikulum praktis yang berfokus pada digitalisasi operasional bisnis dan pembentukan forum komunitas untuk pertukaran wawasan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 3: Model Operasional (Kanal & Keunggulan) -->
+        <section id="operasional" class="mb-12 sm:mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Model Operasional</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-3xl">
+                Bagian ini menjelaskan bagaimana kami menjangkau segmen pelanggan kami dan apa yang membedakan kami secara fundamental dari pesaing. Ini adalah pilar strategi eksekusi dan keberlanjutan jangka panjang.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Kanal Distribusi</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-indigo-500 text-xl font-bold mr-3 mt-1">&#10140;</span>
+                            <span class="text-gray-700"><strong>Kampanye Iklan Berbayar:</strong> Penargetan presisi melalui Meta Ads dan Google Ads untuk akuisisi pelanggan.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-indigo-500 text-xl font-bold mr-3 mt-1">&#10140;</span>
+                            <span class="text-gray-700"><strong>Strategi Content Marketing:</strong> Membangun otoritas dan jangkauan organik melalui Blog, YouTube, dan Media Sosial.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-indigo-500 text-xl font-bold mr-3 mt-1">&#10140;</span>
+                            <span class="text-gray-700"><strong>Kemitraan Strategis:</strong> Kolaborasi dengan institusi akademik dan asosiasi bisnis (UMKM) untuk penetrasi pasar.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Keunggulan Kompetitif Tak Tertandingi</h3>
+                     <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-xl font-bold mr-3 mt-1">&#11088;</span>
+                            <span class="text-gray-700"><strong>Jaringan Mentor Eksklusif:</strong> Akses ke profesional industri aktif, yang merupakan aset yang sangat sulit direplikasi oleh pesaing.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-xl font-bold mr-3 mt-1">&#11088;</span>
+                            <span class="text-gray-700"><strong>Dominasi Data:</strong> Pemanfaatan data tren kebutuhan industri secara eksklusif untuk memastikan relevansi kurikulum yang berkelanjutan.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 4: Finansial & Kinerja (Biaya, Pendapatan, Metrik) -->
+        <section id="finansial" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Analisis Finansial & Kinerja</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-3xl">
+                Model bisnis yang sehat membutuhkan struktur finansial yang berkelanjutan dan indikator kinerja yang jelas. Bagian ini memvisualisasikan komponen biaya dan pendapatan, serta metrik kunci untuk mengukur kesuksesan.
+            </p>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Struktur Finansial (Relatif)</h3>
+                    <p class="text-gray-700 mb-4">
+                        Komparasi visual antara komponen biaya utama dan sumber pendapatan untuk menilai kesehatan model bisnis.
+                    </p>
+                    <div class="chart-container relative w-full max-w-xl mx-auto h-80 md:h-96 max-h-[450px]">
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Indikator Kinerja Kunci (KPI)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            <h4 class="text-lg font-semibold text-indigo-800">Tingkat Retensi Pelanggan</h4>
+                            <p class="text-gray-700 text-sm">Mengukur loyalitas dan kepuasan pelanggan.</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                            <h4 class="text-lg font-semibold text-gray-800">Biaya Akuisisi Pelanggan (CAC)</h4>
+                            <p class="text-gray-700 text-sm">Efisiensi biaya untuk mendapatkan pelanggan baru.</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                            <h4 class="text-lg font-semibold text-gray-800">Tingkat Keterlibatan Pengguna (MAU)</h4>
+                            <p class="text-gray-700 text-sm">Mengukur seberapa aktif pengguna di platform.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            <h4 class="text-lg font-semibold text-indigo-800">Tingkat Penyelesaian Kursus</h4>
+                            <p class="text-gray-700 text-sm">Efektivitas konten dan motivasi belajar pengguna.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center text-gray-500 text-sm py-8 mt-12 border-t border-gray-200">
+        Dibuat sebagai Aplikasi Web Interaktif dari Lean Canvas.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const smoothScroll = (targetId) => {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70, // Offset for sticky header
+                        behavior: 'smooth'
+                    });
+                }
+            };
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = e.currentTarget.getAttribute('href');
+                    smoothScroll(targetId);
+                });
+            });
+
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', (e) => {
+                smoothScroll(e.target.value);
+            });
+
+            const tabs = document.querySelectorAll('.problem-tab');
+            const contents = document.querySelectorAll('.problem-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    contents.forEach(content => {
+                        if (content.id === `problem-content-${tabId}`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const renderSegmentChart = () => {
+                const ctx = document.getElementById('segmentChart');
+                if (!ctx) return;
+                
+                new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Talenta Pencari Kerja', 'Profesional Aktif', 'Entitas UMKM'],
+                        datasets: [{
+                            label: 'Fokus Segmen Pelanggan',
+                            data: [45, 35, 20],
+                            backgroundColor: [
+                                '#4f46e5', // indigo-600
+                                '#0ea5e9', // sky-500
+                                '#0d9488'  // teal-600
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Inter, sans-serif'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const renderFinancialChart = () => {
+                const ctx = document.getElementById('financialChart');
+                if (!ctx) return;
+
+                new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Biaya', 'Pendapatan'],
+                        datasets: [
+                            {
+                                label: 'Komponen 1 (Konten / Langganan)',
+                                data: [40, 70],
+                                backgroundColor: '#4f46e5', // indigo-600
+                            },
+                            {
+                                label: 'Komponen 2 (Teknologi / Workshop)',
+                                data: [30, 20],
+                                backgroundColor: '#0ea5e9', // sky-500
+                            },
+                            {
+                                label: 'Komponen 3 (Pemasaran / Afiliasi)',
+                                data: [20, 10],
+                                backgroundColor: '#0d9488', // teal-600
+                            },
+                            {
+                                label: 'Komponen 4 (SDM Inti)',
+                                data: [10, 0],
+                                backgroundColor: '#6b7280', // gray-500
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Komparasi Struktur Biaya vs. Arus Pendapatan (Relatif %)',
+                                font: {
+                                    size: 16,
+                                    family: 'Inter, sans-serif'
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            renderSegmentChart();
+            renderFinancialChart();
+
+        });
+    </script>
+</body>
+</html>
